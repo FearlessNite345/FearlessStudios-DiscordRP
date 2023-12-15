@@ -1,0 +1,39 @@
+name: Create Archive
+on: [push]
+jobs:
+  read-version:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+
+    - name: Read version from fxmanifest
+      run: |
+        # Assuming your fxmanifest.lua has a line like "version 'x.x.x'"
+        VERSION=$(grep -oP "version '\K\d+\.\d+\.\d+" fxmanifest.lua)
+        echo "Found version: $VERSION"
+        echo "::set-output name=version::$VERSION"
+      id: extract-version
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Archive Release
+      uses: thedoctor0/zip-release@0.7.5
+      with:
+        type: 'zip'
+        filename: 'FearlessStudios-DiscordRP.zip'
+        exclusions: '*.git* *.md'
+    - name: Upload Release
+      uses: ncipollo/release-action@v1.12.0
+      with:
+        artifacts: "FearlessStudios-DiscordRP.zip"
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ needs.read-version.outputs.version }}
