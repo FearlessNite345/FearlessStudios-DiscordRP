@@ -11,3 +11,8 @@ jobs:
         type: 'zip'
         filename: 'FearlessStudios-DiscordRP.zip'
         exclusions: '*.git* *.md'
+    - name: Upload Release
+      uses: ncipollo/release-action@v1.12.0
+      with:
+        artifacts: "FearlessStudios-DiscordRP.zip"
+        token: ${{ secrets.GITHUB_TOKEN }}
