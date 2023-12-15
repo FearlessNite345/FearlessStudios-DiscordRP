@@ -36,4 +36,4 @@ jobs:
       with:
         artifacts: "FearlessStudios-DiscordRP.zip"
         token: ${{ secrets.GITHUB_TOKEN }}
-        tag: ${{ needs.read-version.outputs.version }}
+        tag: v${{ needs.read-version.outputs.version }}
